@@ -80,7 +80,7 @@ suite('Dips', function ()
 
             // Check equal
             assert.deepEqual(Object.keys(dips.$),
-                Object.keys(require('../lib/dependency/file.js').getDependencies(['helpers', 'lib'],
+                Object.keys(require('../lib/entity/file.js').getEntities(['helpers', 'lib'],
                     path.resolve(__dirname, '_fixtures'))), 'Result does not match');
 
             // Check equal
@@ -120,108 +120,6 @@ suite('Dips', function ()
 
         });
 
-        test('Core entities', function ()
-        {
-
-            /*
-             * --------------
-             * --- Case I ---
-             * --------------
-             */
-
-            // Set instance
-            dips = Dips({
-
-                entities : {
-
-                    core : true
-
-                }
-
-            });
-
-            // Check equal
-            assert.deepEqual(Object.keys(dips.$), Object.keys(require('../lib/dependency/core.js').getDependencies()),
-                'Result does not match');
-
-            /*
-             * ---------------
-             * --- Case II ---
-             * ---------------
-             */
-
-            // Set instance
-            dips = Dips({
-
-                entities : {
-
-                    core : {
-
-                        prefix : 'core'
-
-                    }
-
-                }
-
-            });
-
-            // Check equal
-            assert.deepEqual(Object.keys(dips.$),
-                Object.keys(require('../lib/dependency/core.js').getDependencies('core')), 'Result does not match');
-
-        });
-
-        test('NPM entities', function ()
-        {
-
-            /*
-             * --------------
-             * --- Case I ---
-             * --------------
-             */
-
-            // Set instance
-            dips = Dips({
-
-                entities : {
-
-                    npm : true
-
-                }
-
-            });
-
-            // Check equal
-            assert.deepEqual(Object.keys(dips.$), Object.keys(require('../lib/dependency/npm.js').getDependencies()),
-                'Result does not match');
-
-            /*
-             * ---------------
-             * --- Case II ---
-             * ---------------
-             */
-
-            // Set instance
-            dips = Dips({
-
-                entities : {
-
-                    npm : {
-
-                        prefix : 'npm'
-
-                    }
-
-                }
-
-            });
-
-            // Check equal
-            assert.deepEqual(Object.keys(dips.$),
-                Object.keys(require('../lib/dependency/npm.js').getDependencies('npm')), 'Result does not match');
-
-        });
-
         test('File entities', function ()
         {
 
@@ -254,7 +152,7 @@ suite('Dips', function ()
             });
 
             // Check equal
-            assert.deepEqual(Object.keys(dips.$), Object.keys(require('../lib/dependency/file.js').getDependencies({
+            assert.deepEqual(Object.keys(dips.$), Object.keys(require('../lib/entity/file.js').getEntities({
 
                 libraries    : 'lib',
                 json_helpers : 'helpers/view/json'
@@ -292,128 +190,12 @@ suite('Dips', function ()
             });
 
             // Check equal
-            assert.deepEqual(Object.keys(dips.$), Object.keys(require('../lib/dependency/file.js').getDependencies({
+            assert.deepEqual(Object.keys(dips.$), Object.keys(require('../lib/entity/file.js').getEntities({
 
                 libraries    : 'lib',
                 json_helpers : 'helpers/view/json'
 
             }, path.resolve(__dirname, '_fixtures'), 'my')), 'Result does not match');
-
-        });
-
-        test('Core, NPM and File entities', function ()
-        {
-
-            function extend(source, target)
-            {
-
-                // Check target
-                target = target || {};
-
-                // List source keys
-                Object.keys(source).forEach(function (key)
-                {
-                    target[key] = source[key];
-                });
-
-                return target;
-
-            };
-
-            /*
-             * --------------
-             * --- Case I ---
-             * --------------
-             */
-
-            // Set instance
-            dips = Dips({
-
-                entities : {
-
-                    core : true,
-
-                    npm : true,
-
-                    files : {
-
-                        basePath : path.resolve(__dirname, '_fixtures'),
-
-                        paths : {
-
-                            libraries    : 'lib',
-                            json_helpers : 'helpers/view/json'
-
-                        }
-
-                    }
-
-                }
-
-            });
-
-            // Check equal
-            assert.deepEqual(Object.keys(dips.$),
-                Object.keys(extend(require('../lib/dependency/file.js').getDependencies({
-
-                    libraries    : 'lib',
-                    json_helpers : 'helpers/view/json'
-
-                }, path.resolve(__dirname, '_fixtures')), extend(require('../lib/dependency/npm.js').getDependencies(),
-                    require('../lib/dependency/core.js').getDependencies()))), 'Result does not match');
-
-            /*
-             * ---------------
-             * --- Case II ---
-             * ---------------
-             */
-
-            // Set instance
-            dips = Dips({
-
-                entities : {
-
-                    core : {
-
-                        prefix : 'core'
-
-                    },
-
-                    npm : {
-
-                        prefix : 'npm'
-
-                    },
-
-                    files : {
-
-                        basePath : path.resolve(__dirname, '_fixtures'),
-
-                        paths : {
-
-                            libraries    : 'lib',
-                            json_helpers : 'helpers/view/json'
-
-                        },
-
-                        prefix : 'my'
-
-                    }
-
-                }
-
-            });
-
-            // Check equal
-            assert.deepEqual(Object.keys(dips.$),
-                Object.keys(extend(require('../lib/dependency/file.js').getDependencies({
-
-                    libraries    : 'lib',
-                    json_helpers : 'helpers/view/json'
-
-                }, path.resolve(__dirname, '_fixtures'), 'my'),
-                    extend(require('../lib/dependency/npm.js').getDependencies('npm'),
-                        require('../lib/dependency/core.js').getDependencies('core')))), 'Result does not match');
 
         });
 
@@ -709,7 +491,7 @@ suite('Dips', function ()
                 var keys = Object.keys(dependencies);
 
                 // Add dips
-                keys.push('dips');
+                keys.unshift('dips');
 
                 return keys;
 
@@ -874,6 +656,244 @@ suite('Dips', function ()
 
             // Check equal
             assert.deepEqual(dips2.getDependency('http'), dependencies2.http, 'Result does not match');
+
+        });
+
+        test('Core dependencies', function ()
+        {
+
+            /*
+             * --------------
+             * --- Case I ---
+             * --------------
+             */
+
+            // Set instance
+            dips = Dips({
+
+                dependencies : {
+
+                    core : true
+
+                }
+
+            });
+
+            // Check equal
+            assert.deepEqual(dips.getDependencies(), (function ()
+            {
+
+                var keys = Object.keys(require('../lib/dependency/core.js').getDependencies());
+
+                // Add dips
+                keys.unshift('dips');
+
+                return keys;
+
+
+            })(), 'Result does not match');
+
+            /*
+             * ---------------
+             * --- Case II ---
+             * ---------------
+             */
+
+            // Set instance
+            dips = Dips({
+
+                dependencies : {
+
+                    core : {
+
+                        prefix : 'core'
+
+                    }
+
+                }
+
+            });
+
+            // Check equal
+            assert.deepEqual(dips.getDependencies(), (function ()
+            {
+
+                var keys = Object.keys(require('../lib/dependency/core.js').getDependencies('core'));
+
+                // Add dips
+                keys.unshift('dips');
+
+                return keys;
+
+
+            })(), 'Result does not match');
+
+        });
+
+        test('NPM dependencies', function ()
+        {
+
+            /*
+             * --------------
+             * --- Case I ---
+             * --------------
+             */
+
+            // Set instance
+            dips = Dips({
+
+                dependencies : {
+
+                    npm : true
+
+                }
+
+            });
+
+            // Check equal
+            assert.deepEqual(dips.getDependencies(), (function ()
+            {
+
+                var keys = Object.keys(require('../lib/dependency/npm.js').getDependencies());
+
+                // Add dips
+                keys.unshift('dips');
+
+                return keys;
+
+
+            })(), 'Result does not match');
+
+            /*
+             * ---------------
+             * --- Case II ---
+             * ---------------
+             */
+
+            // Set instance
+            dips = Dips({
+
+                dependencies : {
+
+                    npm : {
+
+                        prefix : 'npm'
+
+                    }
+
+                }
+
+            });
+
+            // Check equal
+            assert.deepEqual(dips.getDependencies(), (function ()
+            {
+
+                var keys = Object.keys(require('../lib/dependency/npm.js').getDependencies('npm'));
+
+                // Add dips
+                keys.unshift('dips');
+
+                return keys;
+
+
+            })(), 'Result does not match');
+
+        });
+
+        test('Core and NPM dependencies', function ()
+        {
+
+            function extend(source, target)
+            {
+
+                // Check target
+                target = target || {};
+
+                // List source keys
+                Object.keys(source).forEach(function (key)
+                {
+                    target[key] = source[key];
+                });
+
+                return target;
+
+            };
+
+            /*
+             * --------------
+             * --- Case I ---
+             * --------------
+             */
+
+            // Set instance
+            dips = Dips({
+
+                dependencies : {
+
+                    core : true,
+                    npm  : true
+
+                }
+
+            });
+
+            // Check equal
+            assert.deepEqual(dips.getDependencies(), (function ()
+            {
+
+                var keys = Object.keys(extend(require('../lib/dependency/npm.js').getDependencies(),
+                    require('../lib/dependency/core.js').getDependencies()));
+
+                // Add dips
+                keys.unshift('dips');
+
+                return keys;
+
+
+            })(), 'Result does not match');
+
+            /*
+             * ---------------
+             * --- Case II ---
+             * ---------------
+             */
+
+            // Set instance
+            dips = Dips({
+
+                dependencies : {
+
+                    core : {
+
+                        prefix : 'core'
+
+                    },
+
+                    npm : {
+
+                        prefix : 'npm'
+
+                    }
+
+                }
+
+            });
+
+            // Check equal
+            assert.deepEqual(dips.getDependencies(), (function ()
+            {
+
+                var keys = Object.keys(extend(require('../lib/dependency/npm.js').getDependencies('npm'),
+                    require('../lib/dependency/core.js').getDependencies('core')));
+
+                // Add dips
+                keys.unshift('dips');
+
+                return keys;
+
+
+            })(), 'Result does not match');
 
         });
 
