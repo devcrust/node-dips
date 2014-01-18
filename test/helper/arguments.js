@@ -111,6 +111,9 @@ suite('Helpers :: Arguments', function ()
             assert.equal(args.ArgumentsResult.isDiArgument('$db'), true, 'Result does not match');
 
             // Check equal
+            assert.equal(args.ArgumentsResult.isDiArgument('$'), false, 'Result does not match');
+
+            // Check equal
             assert.equal(args.ArgumentsResult.isDiArgument('foo'), false, 'Result does not match');
 
             // Check equal
@@ -330,8 +333,12 @@ suite('Helpers :: Arguments', function ()
 
         var container = new Container({
 
-                fs   : require('fs'),
-                path : require('path')
+                fs     : require('fs'),
+                path   : require('path'),
+                reader : function ($fs)
+                {
+                    return $fs;
+                }
 
             }),
             result;
@@ -416,6 +423,21 @@ suite('Helpers :: Arguments', function ()
                 }
             ]), [container.getDependency('fs'), 'value of foo', 'my value of bar', container.getDependency('path')],
                 'Result does not match');
+
+            /*
+             * --------------
+             * --- Case V ---
+             * --------------
+             */
+
+            // Get result
+            result = args.parse(function ($fs)
+            {
+
+            });
+
+            // Check equal
+            assert.deepEqual(args.build(result, container), [container.getDependency('fs')], 'Result does not match');
 
         });
 
