@@ -1,6 +1,6 @@
 # Dips [![Build Status](https://api.travis-ci.org/devcrust/node-dips.png)](https://api.travis-ci.org/devcrust/node-dips.png)
 
-A simple yet powerfull dependency injection and entity (file) management framework for Node.JS.
+A simple yet powerfull dependency injection and entity (file) management framework for Node.js
 
 ---
 
