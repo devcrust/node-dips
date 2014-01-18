@@ -119,7 +119,7 @@ function Dips(config)
 
     // Check containers
     if (config.hasOwnProperty('containers')) {
-        this.containers = config.containers;
+        this.setContainers(config.containers);
     }
 
     /*
