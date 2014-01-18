@@ -1,0 +1,25 @@
+env: NODE_ENV=test
+
+language: node_js
+
+node_js:
+  - '0.11'
+  - '0.10'
+  - '0.8'
+  - '0.6'
+
+branches:
+  only:
+    - master
+
+deploy:
+  provider: npm
+  email: chr.rust@googlemail.com
+  api_key:
+    secure: pMVHlw7R9jVBrnHX/FT2/epCpZN2xqt7CtCMTG6cCg6YWiWboSAB+2MeISHTUq1VvLEX/GrVYQHMFvLLpsviuz31z9zcxPnTLPKTSSdat2r/X7Rmq9NPWEcXinQJJRaSsmXKjdQ9OaxsI6Pt35v7HdDaw8PF+uG3TFququm4Zz4=
+  on:
+    tags: true
+
+notifications:
+  email:
+    - chr.rust@googlemail.com

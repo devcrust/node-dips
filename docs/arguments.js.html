@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: lib/helper/arguments.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: lib/helper/arguments.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * ####################################
+ * ##### Dips :: Arguments Helper #####
+ * ####################################
+ */
+
+/**
+ * @namespace Arguments
+ */
+
+var exports = module.exports;
+
+/*
+ * ++++++++++++++
+ * +++ Result +++
+ * ++++++++++++++
+ */
+
+/**
+ * The arguments result class.
+ *
+ * @memberOf Arguments
+ * @constructor
+ * @param {Array.&lt;String>} [values]
+ */
+function ArgumentsResult(values)
+{
+
+    /**
+     * The arguments.
+     *
+     * @property args
+     * @private
+     * @type {Array.&lt;String>}
+     */
+    this.args = [];
+
+    /*
+     * -------------------
+     * --- Constructor ---
+     * -------------------
+     */
+
+    // Set arguments
+    this.setArguments(values);
+
+};
+
+/*
+ * --------------
+ * --- Static ---
+ * --------------
+ */
+
+/**
+ * Checks if the given argument is an dependency injection (DI) argument.
+ *
+ * @memberOf ArgumentsResult
+ * @method isDiArgument
+ * @static
+ * @param {String} value
+ * @returns {Boolean}
+ */
+ArgumentsResult.isDiArgument = function (value)
+{
+    return (value.substr(0, 1) === '$') ? true : false;
+};
+
+/**
+ * Check if the given argument is an usual argument.
+ *
+ * @memberOf ArgumentsResult
+ * @method isUsualArgument
+ * @static
+ * @param {String} value
+ * @returns {Boolean}
+ */
+ArgumentsResult.isUsualArgument = function (value)
+{
+    return (value.substr(0, 1) !== '$') ? true : false;
+};
+
+/*
+ * ----------------
+ * --- Instance ---
+ * ----------------
+ */
+
+/**
+ * Returns all arguments.
+ *
+ * @memberOf ArgumentsResult
+ * @instance
+ * @method getArguments
+ * @returns {Array.&lt;String>}
+ */
+ArgumentsResult.prototype.getArguments = function ()
+{
+    return this.args;
+};
+
+/**
+ * Sets the arguments.
+ *
+ * @memberOf ArgumentsResult
+ * @instance
+ * @method setArguments
+ * @param {Array.&lt;String>} values
+ * @returns {ArgumentsResult}
+ */
+ArgumentsResult.prototype.setArguments = function (values)
+{
+
+    // Check values
+    if (!Array.isArray(values)) {
+        values = [];
+    }
+
+    // Set arguments
+    this.args = values;
+
+    return this;
+
+};
+
+/**
+ * Returns the dependency injection (DI) arguments (starting with "$" - e.g. $Logger, $db, ...).
+ *
+ * @memberOf ArgumentsResult
+ * @instance
+ * @method getDiArguments
+ * @returns {Array.&lt;String>}
+ */
+ArgumentsResult.prototype.getDiArguments = function ()
+{
+
+    var result;
+
+    // Get DI arguments
+    result = this.getArguments().filter(function (value)
+    {
+        return ArgumentsResult.isDiArgument(value);
+    });
+
+    return result;
+
+};
+
+/**
+ * Returns the usual arguments.
+ *
+ * @memberOf ArgumentsResult
+ * @instance
+ * @method getUsualArguments
+ * @returns {Array.&lt;String>}
+ */
+ArgumentsResult.prototype.getUsualArguments = function ()
+{
+
+    var result;
+
+    // Get DI arguments
+    result = this.getArguments().filter(function (value)
+    {
+        return ArgumentsResult.isUsualArgument(value);
+    });
+
+    return result;
+
+};
+
+/**
+ * Returns the position of the given argument.
+ *
+ * @memberOf ArgumentsResult
+ * @instance
+ * @method getArgumentPosition
+ * @param {String} value
+ * @returns {Integer}
+ * @see Array.indexOf
+ */
+ArgumentsResult.prototype.getArgumentPosition = function (value)
+{
+    return this.getArguments().indexOf(value);
+};
+
+// Export arguments result class
+exports.ArgumentsResult = ArgumentsResult;
+
+/*
+ * ++++++++++++++
+ * +++ Parser +++
+ * ++++++++++++++
+ */
+
+/**
+ * Returns the arguments for the given function.
+ *
+ * @memberOf Arguments
+ * @function parse
+ * @param {Function} value the function to parse
+ * @returns {ArgumentsResult}
+ */
+exports.parse = function (value)
+{
+
+    var args,
+        result = [];
+
+    // Get arguments list
+    args = value.toString().match(/function[\s]*\(([\s\S]*?)\)/i);
+
+    // Check args
+    if (args &amp;&amp; args[1]) {
+
+        // Parse arguments list
+        result = args[1].split(',').map(function (value)
+        {
+
+            // Remove whitespaces
+            return value.trim();
+
+        });
+
+    }
+
+    return new ArgumentsResult(result);
+
+};
+
+/*
+ * +++++++++++++++
+ * +++ Builder +++
+ * +++++++++++++++
+ */
+
+/**
+ * Builds the arguments list for the given result and parameters.
+ *
+ * @memberOf Arguments
+ * @function build
+ * @param {ArgumentsResult} args the arguments result
+ * @param {Container} container the dependency injection container
+ * @param {Array.&lt;Mixed>} params the original function arguments
+ * @returns {Array.&lt;String>}
+ */
+exports.build = function (args, container, params)
+{
+
+    var result = [],
+        pos = 0;
+
+    // Check params
+    params = params || [];
+
+    /*
+     * -------------------
+     * --- with Object ---
+     * -------------------
+     */
+
+    // Check is suitable
+    if (params[0] instanceof Object &amp;&amp; args.getUsualArguments().length > 1) {
+
+        // List arguments
+        args.getArguments().forEach(function (name)
+        {
+
+            // Check is DI argument
+            if (ArgumentsResult.isDiArgument(name)) {
+                result.push(container.getDependency(name.substr(1)));
+            } else {
+                result.push(params[0][name]);
+            }
+
+        });
+
+    }
+
+    /*
+     * ----------------------
+     * --- with Arguments ---
+     * ----------------------
+     */
+
+    else {
+
+        // List arguments
+        args.getArguments().forEach(function (name)
+        {
+
+            // Check is DI argument
+            if (ArgumentsResult.isDiArgument(name)) {
+                result.push(container.getDependency(name.substr(1)));
+            } else {
+                result.push(params[pos++]);
+            }
+
+        });
+
+    }
+
+    return result;
+
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ArgumentsResult.html">ArgumentsResult</a></li><li><a href="Container.html">Container</a></li><li><a href="Dips.html">Dips</a></li></ul><h3>Namespaces</h3><ul><li><a href="Arguments.html">Arguments</a></li><li><a href="Core_Dependencies.html">Core_Dependencies</a></li><li><a href="File_Dependencies.html">File_Dependencies</a></li><li><a href="Lazy_Loader.html">Lazy_Loader</a></li><li><a href="NPM_Dependencies.html">NPM_Dependencies</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha3</a> on Fri Jan 17 2014 11:25:02 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

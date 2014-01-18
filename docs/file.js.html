@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: lib/dependency/file.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: lib/dependency/file.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * #####################################
+ * ##### Dips :: File Dependencies #####
+ * #####################################
+ */
+
+/**
+ * @namespace File_Dependencies
+ */
+
+var exports = module.exports,
+    util = require('util'),
+    Path = require('path'),
+    fs = require('fs');
+
+/*
+ * +++++++++++++++
+ * +++ Scanner +++
+ * +++++++++++++++
+ */
+
+/**
+ * The file extension order.
+ * Used to prioritise multiple equal named files (basename).
+ *
+ * @memberOf File_Dependencies
+ * @property extensionOrder
+ * @type {Array.&lt;String>}
+ */
+exports.extensionOrder = (function ()
+{
+
+    var result = ['js', 'node', 'json'];
+
+    // Add require extensions
+    result = result.concat(
+
+        Object.keys(require.extensions)
+
+            .map(function (value)
+            {
+                return value.substr(1);
+            })
+
+    );
+
+    // Remove duplicated
+    result = result.filter(function (value, pos)
+    {
+        return (result.indexOf(value) === pos) ? true : false;
+    });
+
+    return result;
+
+})();
+
+/**
+ * Scans the given path.
+ *
+ * @memberOf File_Dependencies
+ * @function scan
+ * @param {String} path the path to use
+ * @param {Object.&lt;String, *>} [result={}] the result to use
+ * @returns {Object.&lt;String, *>}
+ */
+exports.scan = function scan(path, result)
+{
+
+    var entities;
+
+    // Check result
+    result = result || {};
+
+    // Set entities
+    entities = fs.readdirSync(path);
+
+    // List directory entities
+    entities.forEach(function (value)
+    {
+
+        var entity = Path.basename(value, Path.extname(value)),
+            entityPath = Path.join(path, entity);
+
+        // Check already registered
+        if (result.hasOwnProperty(entity)) {
+            return;
+        }
+
+        // Define lazy loader
+        Object.defineProperty(result, entity, {
+
+            configurable : false,
+            enumerable   : true,
+
+            get : (function ()
+            {
+
+                var result = {},
+                    files;
+
+                /*
+                 * ++++++++++++
+                 * +++ File +++
+                 * ++++++++++++
+                 */
+
+                // Get files
+                files = entities.filter(function (value)
+                {
+
+                    var parts;
+
+                    // Get file parts
+                    parts = value.match(/^(.*)(\..*)/i);
+
+                    // Check parts
+                    if (!parts) {
+                        return false;
+                    }
+
+                    // Check basename
+                    if (parts[1] !== entity) {
+                        return false;
+                    }
+
+                    // Check extensions
+                    if (Object.keys(require.extensions).indexOf(parts[2]) === -1) {
+                        return false;
+                    }
+
+                    return true;
+
+                });
+
+                // Sort files
+                files = files.sort(function (a, b)
+                {
+
+                    var aExt = Path.extname(a).substr(1),
+                        bExt = Path.extname(b).substr(1);
+
+                    // Check priority of a
+                    if (exports.extensionOrder.indexOf(aExt) &lt; exports.extensionOrder.indexOf(bExt)) {
+                        return -1;
+                    }
+
+                    // Check priority of b
+                    else if (exports.extensionOrder.indexOf(bExt) &lt; exports.extensionOrder.indexOf(aExt)) {
+                        return 1;
+                    }
+
+                    return 0;
+
+                });
+
+                // Check files
+                if (files.length > 0) {
+
+                    // Register first file
+                    result = require(Path.join(path, files.shift()));
+
+                    // Check result
+                    if (!result instanceof Object) {
+                        throw new Error(util.format('Entity "%s" in directory "%s" is not a valid object!', entity,
+                            file));
+                    }
+
+                }
+
+                // Define DI container
+                result.$ = {};
+
+                // List remaining files
+                files.forEach(function (value)
+                {
+
+                    // Define lazy loader
+                    Object.defineProperty(result.$, value, {
+
+                        configurable : false,
+                        enumerable   : true,
+
+                        get : (function ()
+                        {
+                            return require(Path.join(path, value));
+                        })
+
+                    });
+
+                });
+
+                /*
+                 * ++++++++++++++
+                 * +++ Folder +++
+                 * ++++++++++++++
+                 */
+
+                // Check is directory
+                if (entities.indexOf(entity) !== -1 &amp;&amp; fs.statSync(entityPath).isDirectory()) {
+                    scan(entityPath, result);
+                }
+
+                return result;
+
+            })
+
+        });
+
+    });
+
+    return result;
+
+};
+
+/*
+ * ++++++++++++++++++++
+ * +++ Dependencies +++
+ * ++++++++++++++++++++
+ */
+
+/**
+ * Returns the file dependencies for the given paths.
+ *
+ * @memberOf File_Dependencies
+ * @function getDependencies
+ * @param {String|Array.&lt;String>|Object.&lt;String,String>} paths the paths to parse, dependency id as key and folder path as value if object is used
+ * @param {String} [basePath=""] the base path to use, if folders content uses relative paths
+ * @param {String|undefined} [prefix=undefined] the prefix to use e.g. "view" for "my.view" or no prefix for "view"
+ * @returns {Object.&lt;String, *>}
+ */
+exports.getDependencies = function (paths, basePath, prefix)
+{
+
+    var result = {};
+
+    // Check base path
+    basePath = basePath || '';
+
+    /*
+     * -------------
+     * --- Paths ---
+     * -------------
+     */
+
+    // Set paths
+    paths = (typeof paths === 'string') ? [paths] : paths;
+
+    // Check paths is array
+    if (Array.isArray(paths)) {
+
+        // Map paths
+        paths = (function ()
+        {
+
+            var result = {};
+
+            // List paths
+            paths.forEach(function (value)
+            {
+
+                // Add to result
+                result[Path.basename(value)] = value;
+
+            });
+
+            return result;
+
+        })();
+
+    }
+
+    /*
+     * ---------------
+     * --- Process ---
+     * ---------------
+     */
+
+    // List paths
+    Object.keys(paths).forEach(function (value)
+    {
+
+        var id = value;
+
+        // Check prefix
+        if (prefix) {
+            id = util.format('%s_%s', prefix, id);
+        }
+
+        // Add to result
+        result[id] = exports.scan(Path.join(basePath, paths[value]));
+
+    });
+
+    return result;
+
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ArgumentsResult.html">ArgumentsResult</a></li><li><a href="Container.html">Container</a></li><li><a href="Dips.html">Dips</a></li></ul><h3>Namespaces</h3><ul><li><a href="Arguments.html">Arguments</a></li><li><a href="Core_Dependencies.html">Core_Dependencies</a></li><li><a href="File_Dependencies.html">File_Dependencies</a></li><li><a href="Lazy_Loader.html">Lazy_Loader</a></li><li><a href="NPM_Dependencies.html">NPM_Dependencies</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha3</a> on Fri Jan 17 2014 11:25:02 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

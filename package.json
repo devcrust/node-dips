@@ -1,0 +1,65 @@
+{
+
+    "name"        : "dips",
+    "description" : "NodeJS Dependency Injection",
+    "homepage"    : "http://devcrust.github.io/node-dips",
+    "keywords"    : ["di", "dependency injection", "ioc", "inversion of control", "dependency", "injection", "inject"],
+    "version"     : "0.1.0",
+    "license"     : "MIT",
+
+    "author"       : {
+
+        "name"  : "Christoph Rust",
+        "email" : "chr.rust@googlemail.com"
+
+    },
+    "contributors" : [
+
+        {
+            "name"  : "Christoph Rust",
+            "email" : "chr.rust@googlemail.com"
+        }
+
+    ],
+
+    "repository" : "git://github.com/devcrust/node-dips.git",
+
+    "bugs" : {
+
+        "url" : "https://github.com/devcrust/node-dips/issues"
+
+    },
+
+    "engines" : {
+
+        "node" : ">= 0.6.x"
+
+    },
+
+    "dependencies"    : {
+
+    },
+    "devDependencies" : {
+
+        "mocha" : "1.17.x"
+
+    },
+
+    "files" : [
+
+        "lib",
+        "test",
+        "dips.js"
+
+    ],
+
+    "main" : "./dips.js",
+
+    "scripts" : {
+
+        "test"      : "NODE_ENV=test ./node_modules/.bin/mocha --reporter spec --ui tdd --timeout 5000 --slow 100 --colors --bail --recursive test/",
+        "build-doc" : "jsdoc --destination docs --recurse --private lib/ dips.js"
+
+    }
+
+}
