@@ -96,6 +96,50 @@ suite('Dependency Container', function ()
 
         });
 
+        test('#addDependencies', function ()
+        {
+
+            /*
+             * ++++++++++++++
+             * +++ Case I +++
+             * ++++++++++++++
+             */
+
+            // Reset dependencies
+            container.setDependencies({});
+
+            // Set dependencies
+            container.addDependencies(dependencies2);
+
+            // Check equal
+            assert.equal(container.hasDependency('http'), true, 'Dependency does not exist');
+
+            // Check equal
+            assert.deepEqual(container.getDependencies(), Object.keys(dependencies2), 'Result does not match');
+
+            // Check equal
+            assert.deepEqual(Object.keys(dependencies2), container.getDependencies(), 'Result does not match');
+
+            /*
+             * +++++++++++++++
+             * +++ Case II +++
+             * +++++++++++++++
+             */
+
+            // Reset dependencies
+            container.setDependencies({});
+
+            // Set dependencies
+            assert.deepEqual(container.addDependencies(dependencies), container, 'Result does not match');
+
+            // Check equal
+            assert.deepEqual(container.getDependencies(), Object.keys(dependencies), 'Result does not match');
+
+            // Check equal
+            assert.deepEqual(Object.keys(dependencies), container.getDependencies(), 'Result does not match');
+
+        });
+
         test('#hasDependency', function ()
         {
 
