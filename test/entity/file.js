@@ -2,13 +2,13 @@
 
 var assert = require('assert'),
     path = require('path'),
-    file = require('../../lib/dependency/file.js');
+    file = require('../../lib/entity/file.js');
 
-suite('File Dependencies', function ()
+suite('File Entities', function ()
 {
 
     var fixturesPath = path.resolve(__dirname, '../_fixtures'),
-        dependencies;
+        entities;
 
     test('Folder as String', function ()
     {
@@ -19,11 +19,11 @@ suite('File Dependencies', function ()
          * --------------
          */
 
-        // Get dependencies
-        dependencies = file.getDependencies('lib', fixturesPath);
+        // Get entities
+        entities = file.getEntities('lib', fixturesPath);
 
         // Check matches content
-        assert.deepEqual(dependencies, {
+        assert.deepEqual(entities, {
 
             lib : {
 
@@ -33,26 +33,26 @@ suite('File Dependencies', function ()
 
             }
 
-        }, 'Dependencies do not match');
+        }, 'Entities do not match');
 
         // Check matches content
-        assert.equal(dependencies.lib.npm, require(path.join(fixturesPath, '/lib/npm.js')),
-            'Dependencies for "npm" do not match');
+        assert.equal(entities.lib.npm, require(path.join(fixturesPath, '/lib/npm.js')),
+            'Entities for "npm" do not match');
 
         // Check matches content
-        assert.equal(dependencies.lib.npm.$['npm.json'], require(path.join(fixturesPath, '/lib/npm.json')),
-            'Dependencies for "npm" do not match');
+        assert.equal(entities.lib.npm.$['npm.json'], require(path.join(fixturesPath, '/lib/npm.json')),
+            'Entities for "npm" do not match');
         /*
          * +++++++++++++++
          * +++ Case II +++
          * +++++++++++++++
          */
 
-        // Get dependencies
-        dependencies = file.getDependencies('helpers/view/json', fixturesPath);
+        // Get entities
+        entities = file.getEntities('helpers/view/json', fixturesPath);
 
         // Check matches content
-        assert.deepEqual(dependencies, {
+        assert.deepEqual(entities, {
 
             json : {
 
@@ -61,7 +61,7 @@ suite('File Dependencies', function ()
 
             }
 
-        }, 'Dependencies do not match');
+        }, 'Entities do not match');
 
         /*
          * ---------------
@@ -69,19 +69,19 @@ suite('File Dependencies', function ()
          * ---------------
          */
 
-        // Get dependencies
-        dependencies = file.getDependencies('helpers/view', fixturesPath);
+        // Get entities
+        entities = file.getEntities('helpers/view', fixturesPath);
 
         // Check matches content
-        assert.equal(dependencies.view.json.valueOf(), 'json.js', 'Dependencies do not match');
+        assert.equal(entities.view.json.valueOf(), 'json.js', 'Entities do not match');
 
         // Check matches content
-        assert.equal(dependencies.view.json.parse,
-            require(path.join(fixturesPath, '/helpers/view/json/parse.js')), 'Dependencies do not match');
+        assert.equal(entities.view.json.parse,
+            require(path.join(fixturesPath, '/helpers/view/json/parse.js')), 'Entities do not match');
 
         // Check matches content
-        assert.equal(dependencies.view.json.stringify,
-            require(path.join(fixturesPath, '/helpers/view/json/stringify.js')), 'Dependencies do not match');
+        assert.equal(entities.view.json.stringify,
+            require(path.join(fixturesPath, '/helpers/view/json/stringify.js')), 'Entities do not match');
 
     });
 
@@ -94,11 +94,11 @@ suite('File Dependencies', function ()
          * --------------
          */
 
-        // Get dependencies
-        dependencies = file.getDependencies(['lib', 'helpers/view/json'], fixturesPath);
+        // Get entities
+        entities = file.getEntities(['lib', 'helpers/view/json'], fixturesPath);
 
         // Check matches content
-        assert.deepEqual(dependencies, {
+        assert.deepEqual(entities, {
 
             lib : {
 
@@ -115,7 +115,7 @@ suite('File Dependencies', function ()
 
             }
 
-        }, 'Dependencies do not match');
+        }, 'Entities do not match');
 
         /*
          * ---------------
@@ -123,19 +123,19 @@ suite('File Dependencies', function ()
          * ---------------
          */
 
-        // Get dependencies
-        dependencies = file.getDependencies(['helpers/view'], fixturesPath);
+        // Get entities
+        entities = file.getEntities(['helpers/view'], fixturesPath);
 
         // Check matches content
-        assert.equal(dependencies.view.json.valueOf(), 'json.js', 'Dependencies do not match');
+        assert.equal(entities.view.json.valueOf(), 'json.js', 'Entities do not match');
 
         // Check matches content
-        assert.equal(dependencies.view.json.parse,
-            require(path.join(fixturesPath, '/helpers/view/json/parse.js')), 'Dependencies do not match');
+        assert.equal(entities.view.json.parse,
+            require(path.join(fixturesPath, '/helpers/view/json/parse.js')), 'Entities do not match');
 
         // Check matches content
-        assert.equal(dependencies.view.json.stringify,
-            require(path.join(fixturesPath, '/helpers/view/json/stringify.js')), 'Dependencies do not match');
+        assert.equal(entities.view.json.stringify,
+            require(path.join(fixturesPath, '/helpers/view/json/stringify.js')), 'Entities do not match');
 
     });
 
@@ -148,8 +148,8 @@ suite('File Dependencies', function ()
          * --------------
          */
 
-        // Get dependencies
-        dependencies = file.getDependencies({
+        // Get entities
+        entities = file.getEntities({
 
             libraries    : 'lib',
             json_helpers : 'helpers/view/json'
@@ -157,7 +157,7 @@ suite('File Dependencies', function ()
         }, fixturesPath);
 
         // Check matches content
-        assert.deepEqual(dependencies, {
+        assert.deepEqual(entities, {
 
             libraries : {
 
@@ -174,7 +174,7 @@ suite('File Dependencies', function ()
 
             }
 
-        }, 'Dependencies do not match');
+        }, 'Entities do not match');
 
         /*
          * ---------------
@@ -182,34 +182,34 @@ suite('File Dependencies', function ()
          * ---------------
          */
 
-        // Get dependencies
-        dependencies = file.getDependencies({
+        // Get entities
+        entities = file.getEntities({
 
             'view' : 'helpers/view'
 
         }, fixturesPath);
 
         // Check matches content
-        assert.equal(dependencies.view.json.valueOf(), 'json.js', 'Dependencies do not match');
+        assert.equal(entities.view.json.valueOf(), 'json.js', 'Entities do not match');
 
         // Check matches content
-        assert.equal(dependencies.view.json.parse,
-            require(path.join(fixturesPath, '/helpers/view/json/parse.js')), 'Dependencies do not match');
+        assert.equal(entities.view.json.parse,
+            require(path.join(fixturesPath, '/helpers/view/json/parse.js')), 'Entities do not match');
 
         // Check matches content
-        assert.equal(dependencies.view.json.stringify,
-            require(path.join(fixturesPath, '/helpers/view/json/stringify.js')), 'Dependencies do not match');
+        assert.equal(entities.view.json.stringify,
+            require(path.join(fixturesPath, '/helpers/view/json/stringify.js')), 'Entities do not match');
 
     });
 
-    test('Prefix', function()
+    test('Prefix', function ()
     {
 
-        // Get dependencies
-        dependencies = file.getDependencies('lib', fixturesPath, 'my');
+        // Get entities
+        entities = file.getEntities('lib', fixturesPath, 'my');
 
         // Check matches content
-        assert.deepEqual(dependencies, {
+        assert.deepEqual(entities, {
 
             my_lib : {
 
@@ -219,7 +219,7 @@ suite('File Dependencies', function ()
 
             }
 
-        }, 'Dependencies do not match');
+        }, 'Entities do not match');
 
     });
 
