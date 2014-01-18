@@ -31,11 +31,15 @@
  * ################
  */
 
-var dependencies = {
+var entities = {
+
+        file : require('./lib/entity/file.js')
+
+    },
+    dependencies = {
 
         core : require('./lib/dependency/core.js'),
-        npm  : require('./lib/dependency/npm.js'),
-        file : require('./lib/dependency/file.js')
+        npm  : require('./lib/dependency/npm.js')
 
     },
     Container = require('./lib/dependency/container.js');
@@ -48,6 +52,8 @@ var dependencies = {
  */
 function Dips(config)
 {
+
+    var self = this;
 
     /**
      * Resolves the given entity id.
@@ -109,12 +115,33 @@ function Dips(config)
     if (config.hasOwnProperty('entities')) {
 
         /*
+         * Files
+         */
+
+        // Check files
+        if (config.entities.hasOwnProperty('files')) {
+            this.addEntities(entities.file.getEntities(config.entities.files.paths,
+                config.entities.files.basePath, config.entities.files.prefix || undefined));
+        }
+
+    }
+
+    /*
+     * --------------------
+     * --- Dependencies ---
+     * --------------------
+     */
+
+    // Check dependencies
+    if (config.hasOwnProperty('dependencies')) {
+
+        /*
          * Core
          */
 
         // Check core
-        if (config.entities.hasOwnProperty('core')) {
-            this.addEntities(dependencies.core.getDependencies(config.entities.core.prefix || undefined));
+        if (config.dependencies.hasOwnProperty('core')) {
+            this.addDependencies(dependencies.core.getDependencies(config.dependencies.core.prefix || undefined));
         }
 
         /*
@@ -122,42 +149,39 @@ function Dips(config)
          */
 
         // Check npm
-        if (config.entities.hasOwnProperty('npm')) {
-            this.addEntities(dependencies.npm.getDependencies(config.entities.npm.prefix || undefined));
+        if (config.dependencies.hasOwnProperty('npm')) {
+            this.addDependencies(dependencies.npm.getDependencies(config.dependencies.npm.prefix || undefined));
         }
 
         /*
-         * Files
+         * Custom
          */
 
-        // Check files
-        if (config.entities.hasOwnProperty('files')) {
-            this.addEntities(dependencies.file.getDependencies(config.entities.files.paths,
-                config.entities.files.basePath, config.entities.files.prefix || undefined));
-        }
+        // List dependencies
+        Object.keys(config.dependencies).forEach(function (id)
+        {
+
+            // Check dependency
+            if (Object.keys(dependencies).indexOf(id) !== -1) {
+                return;
+            }
+
+            // Set dependency
+            self.setDependency(id, config.dependencies[id]);
+
+        });
 
     }
 
     /*
-     * -----------------
-     * --- Container ---
-     * -----------------
+     * ------------------
+     * --- Containers ---
+     * ------------------
      */
 
     // Check containers
     if (config.hasOwnProperty('containers')) {
-        this.containers = config.containers;
-    }
-
-    /*
-     * ------------------
-     * --- Dependency ---
-     * ------------------
-     */
-
-    // Check dependencies
-    if (config.hasOwnProperty('dependencies')) {
-        this.setDependencies(config.dependencies);
+        this.setContainers(config.containers);
     }
 
 };
@@ -367,6 +391,26 @@ Dips.prototype.setDependencies = function (values)
 };
 
 /**
+ * Adds the given dependencies to the default container.
+ *
+ * @memberOf Dips
+ * @instance
+ * @method addDependencies
+ * @param {Object.&lt;String, *>} values
+ * @returns {Dips}
+ * @see Container.setDependencies
+ */
+Dips.prototype.addDependencies = function (values)
+{
+
+    // Add dependencies
+    this.defaultContainer.addDependencies(values);
+
+    return this;
+
+};
+
+/**
  * Checks if the dependency with the given id does exist in the default container.
  *
  * @memberOf Dips
@@ -503,13 +547,13 @@ module.exports = function (config)
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ArgumentsResult.html">ArgumentsResult</a></li><li><a href="Container.html">Container</a></li><li><a href="Dips.html">Dips</a></li></ul><h3>Namespaces</h3><ul><li><a href="Arguments.html">Arguments</a></li><li><a href="Core_Dependencies.html">Core_Dependencies</a></li><li><a href="File_Dependencies.html">File_Dependencies</a></li><li><a href="Lazy_Loader.html">Lazy_Loader</a></li><li><a href="NPM_Dependencies.html">NPM_Dependencies</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="ArgumentsResult.html">ArgumentsResult</a></li><li><a href="Container.html">Container</a></li><li><a href="Dips.html">Dips</a></li></ul><h3>Namespaces</h3><ul><li><a href="Arguments.html">Arguments</a></li><li><a href="Core_Dependencies.html">Core_Dependencies</a></li><li><a href="File_Entities.html">File_Entities</a></li><li><a href="Lazy_Loader.html">Lazy_Loader</a></li><li><a href="NPM_Dependencies.html">NPM_Dependencies</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha3</a> on Fri Jan 17 2014 11:25:02 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha3</a> on Sat Jan 18 2014 23:35:41 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>
