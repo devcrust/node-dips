@@ -4,11 +4,15 @@
  * ################
  */
 
-var dependencies = {
+var entities = {
+
+        file : require('./lib/entity/file.js')
+
+    },
+    dependencies = {
 
         core : require('./lib/dependency/core.js'),
-        npm  : require('./lib/dependency/npm.js'),
-        file : require('./lib/dependency/file.js')
+        npm  : require('./lib/dependency/npm.js')
 
     },
     Container = require('./lib/dependency/container.js');
@@ -21,6 +25,8 @@ var dependencies = {
  */
 function Dips(config)
 {
+
+    var self = this;
 
     /**
      * Resolves the given entity id.
@@ -82,12 +88,33 @@ function Dips(config)
     if (config.hasOwnProperty('entities')) {
 
         /*
+         * Files
+         */
+
+        // Check files
+        if (config.entities.hasOwnProperty('files')) {
+            this.addEntities(entities.file.getEntities(config.entities.files.paths,
+                config.entities.files.basePath, config.entities.files.prefix || undefined));
+        }
+
+    }
+
+    /*
+     * --------------------
+     * --- Dependencies ---
+     * --------------------
+     */
+
+    // Check dependencies
+    if (config.hasOwnProperty('dependencies')) {
+
+        /*
          * Core
          */
 
         // Check core
-        if (config.entities.hasOwnProperty('core')) {
-            this.addEntities(dependencies.core.getDependencies(config.entities.core.prefix || undefined));
+        if (config.dependencies.hasOwnProperty('core')) {
+            this.addDependencies(dependencies.core.getDependencies(config.dependencies.core.prefix || undefined));
         }
 
         /*
@@ -95,42 +122,39 @@ function Dips(config)
          */
 
         // Check npm
-        if (config.entities.hasOwnProperty('npm')) {
-            this.addEntities(dependencies.npm.getDependencies(config.entities.npm.prefix || undefined));
+        if (config.dependencies.hasOwnProperty('npm')) {
+            this.addDependencies(dependencies.npm.getDependencies(config.dependencies.npm.prefix || undefined));
         }
 
         /*
-         * Files
+         * Custom
          */
 
-        // Check files
-        if (config.entities.hasOwnProperty('files')) {
-            this.addEntities(dependencies.file.getDependencies(config.entities.files.paths,
-                config.entities.files.basePath, config.entities.files.prefix || undefined));
-        }
+        // List dependencies
+        Object.keys(config.dependencies).forEach(function (id)
+        {
+
+            // Check dependency
+            if (Object.keys(dependencies).indexOf(id) !== -1) {
+                return;
+            }
+
+            // Set dependency
+            self.setDependency(id, config.dependencies[id]);
+
+        });
 
     }
 
     /*
-     * -----------------
-     * --- Container ---
-     * -----------------
+     * ------------------
+     * --- Containers ---
+     * ------------------
      */
 
     // Check containers
     if (config.hasOwnProperty('containers')) {
         this.setContainers(config.containers);
-    }
-
-    /*
-     * ------------------
-     * --- Dependency ---
-     * ------------------
-     */
-
-    // Check dependencies
-    if (config.hasOwnProperty('dependencies')) {
-        this.setDependencies(config.dependencies);
     }
 
 };
@@ -334,6 +358,26 @@ Dips.prototype.setDependencies = function (values)
 
     // Register self as dependency
     this.setDependency('dips', this);
+
+    return this;
+
+};
+
+/**
+ * Adds the given dependencies to the default container.
+ *
+ * @memberOf Dips
+ * @instance
+ * @method addDependencies
+ * @param {Object.<String, *>} values
+ * @returns {Dips}
+ * @see Container.setDependencies
+ */
+Dips.prototype.addDependencies = function (values)
+{
+
+    // Add dependencies
+    this.defaultContainer.addDependencies(values);
 
     return this;
 
