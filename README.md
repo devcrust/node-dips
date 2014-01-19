@@ -251,4 +251,4 @@ dips.invoke({
 });
 ```
 
-__Passing other types (`string`, `number`, `boolean`, `null`, `undefined`) as value of `Dips.invoke` will be returned as they are, without modification.__
+__Passing other types (`string`, `number`, `boolean`, `null`, `undefined`) as value for `Dips.invoke` will be returned as they are, without modification.__
