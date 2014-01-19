@@ -257,7 +257,7 @@ Dips.prototype.getContainers = function ()
  * @memberOf Dips
  * @instance
  * @method setContainers
- * @param {Object.<String, Mixed>) values
+ * @param {Object.<String, Container>) values
  * @returns {Dips}
  */
 Dips.prototype.setContainers = function (values)
@@ -291,7 +291,7 @@ Dips.prototype.hasContainer = function (id)
  * @instance
  * @method getContainer
  * @param {String} id
- * @returns {Container}
+ * @returns {Container|undefined}
  */
 Dips.prototype.getContainer = function (id)
 {
