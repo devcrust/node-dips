@@ -4,7 +4,7 @@
     "description" : "A simple yet powerfull dependency injection and entity (file) management framework for Node.js",
     "homepage"    : "http://devcrust.github.io/node-dips",
     "keywords"    : ["di", "dependency injection", "ioc", "inversion of control", "dependency", "injection", "inject", "entity", "management"],
-    "version"     : "0.1.1",
+    "version"     : "0.1.2",
     "license"     : "MIT",
 
     "author"       : {
