@@ -176,7 +176,7 @@ dips.$('lib.database.connection') // equals: require('./lib/database/connection.
 
 * `setContainer(String id, Container value)` - sets the dependency container with the given id and value
 
-#### `Dependencies`
+##### `Dependencies`
 
 _The following methods are inherited from `Container`_
 
