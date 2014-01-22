@@ -4,6 +4,10 @@
  * ################
  */
 
+/**
+ * @namespace Dips
+ */
+
 var entities = {
 
         file : require('./lib/entity/file.js')
@@ -20,6 +24,7 @@ var entities = {
 /**
  * The dips class.
  *
+ * @memberOf Dips
  * @constructor
  * @param {Object} config
  */
@@ -123,7 +128,8 @@ function Dips(config)
 
         // Check npm
         if (config.dependencies.hasOwnProperty('npm')) {
-            this.addDependencies(dependencies.npm.getDependencies(config.dependencies.npm.prefix || undefined));
+            this.addDependencies(dependencies.npm.getDependencies(config.dependencies.npm.prefix || undefined,
+                config.dependencies.npm.ignore || undefined));
         }
 
         /*
@@ -511,3 +517,30 @@ module.exports = function (config)
 {
     return new Dips(config);
 };
+
+/**
+ * The entities.
+ *
+ * @memberOf Dips
+ * @property entities
+ * @type {Object}
+ */
+module.exports.entities = entities;
+
+/**
+ * The dependencies.
+ *
+ * @memberOf Dips
+ * @property dependencies
+ * @type {Object}
+ */
+module.exports.dependencies = dependencies;
+
+/**
+ * The container.
+ *
+ * @memberOf Dips
+ * @property Container
+ * @type {Container}
+ */
+module.exports.Container = Container;

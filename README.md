@@ -1,6 +1,8 @@
-# Dips [![Build Status](https://travis-ci.org/devcrust/node-dips.png?branch=master)](https://travis-ci.org/devcrust/node-dips)
+# Dips [![NPM version](https://badge.fury.io/js/dips.png)](http://badge.fury.io/js/dips) [![Build Status](https://travis-ci.org/devcrust/node-dips.png?branch=master)](https://travis-ci.org/devcrust/node-dips)
 
-A simple yet powerfull dependency injection and entity (file) management framework for Node.js
+A simple yet powerful dependency injection and entity (file) management framework for Node.js
+
+[![NPM](https://nodei.co/npm/dips.png)](https://nodei.co/npm/dips/)
 
 ---
 
@@ -8,7 +10,7 @@ A simple yet powerfull dependency injection and entity (file) management framewo
 
 * Inject all types of dependencies (Function, Object/Instance, Array, Boolean, String, Number, etc.)
 * Support for Node.js core and NPM dependencies out of the box
-* File entity resolver (folder/subfolder/file.js becomes `Dips.$.folder.subfolder.file`)
+* File entity resolver (folder/sub-folder/file.js becomes `Dips.$.folder.sub-folder.file`)
 * Fast (lazy loading support)
 * Re-register dependencies
 * Supports multiple containers/scopes
@@ -90,7 +92,7 @@ dips.invoke(function($db, callback)
 });
 
 // Example II: Invoke function
-dips.invoke(function($fs, $path) // $fs and $path registred by the "core" dependencies
+dips.invoke(function($fs, $path) // $fs and $path registered by the "core" dependencies
 {
     $fs.readdirSync($path.resolve(__dirname, '..'));
 });
@@ -133,6 +135,7 @@ dips.$('lib.database.connection') // equals: require('./lib/database/connection.
         - `prefix ([String=""])` - the optional prefix to use e.g. "core" -> "core\_fs", etc. _(optional)_
     - `npm ([Object.<String, *> | *])` - if present (typically with the value of `true`), registers the installed NPM modules (behaves like [module.require](http://nodejs.org/api/modules.html#modules_all_together)) as dependencies _(optional)_
         - `prefix ([String=""])` - the optional prefix to use e.g. "npm" -> "npm\_express", etc. _(optional)_
+        - `ignore ([Array.<String, RegExp>])` - the optional ignores added to the default ignores ".bin" and ".gitignore" _(optional)_
     - `...` - the custom dependencies to register, dependency id as key `String` _(optional)_
 * `containers ([Object.<String, Container>])` - the dependency containers to register _(optional)_
 
@@ -184,7 +187,7 @@ _The following methods are inherited from `Container`_
 
 * `setDependencies(Object.<String, *> values)` - sets and overrides the given dependencies within the `defaultContainer`
 
-* `addDependencies(Object.<String, *> values)` - addes the given dependencies within the `defaultContainer`
+* `addDependencies(Object.<String, *> values)` - adds the given dependencies within the `defaultContainer`
 
 * `hasDependency(String id)` - checks if the dependency with the given id does exist within the `defaultContainer`
 
@@ -252,3 +255,27 @@ dips.invoke({
 ```
 
 __Passing other types (`string`, `number`, `boolean`, `null`, `undefined`) as value for `Dips.invoke` will be returned as they are, without modification.__
+
+## License
+
+[The MIT License (MIT)](http://opensource.org/licenses/MIT)
+
+Copyright (c) 2014 - Christoph Rust
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.

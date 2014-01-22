@@ -1,11 +1,19 @@
 {
 
     "name"        : "dips",
-    "description" : "A simple yet powerfull dependency injection and entity (file) management framework for Node.js",
+    "description" : "A simple yet powerful dependency injection and entity (file) management framework for Node.js",
     "homepage"    : "http://devcrust.github.io/node-dips",
-    "keywords"    : ["di", "dependency injection", "ioc", "inversion of control", "dependency", "injection", "inject", "entity", "management"],
-    "version"     : "0.1.2",
-    "license"     : "MIT",
+    "keywords"    : [
+        "di", "dependency injection", "ioc", "inversion of control", "dependency", "injection", "inject", "entity",
+        "management"
+    ],
+    "version"     : "0.1.3",
+    "license"     : {
+
+        "type" : "MIT",
+        "url"  : "https://raw.github.com/devcrust/node-dips/master/LICENSE"
+
+    },
 
     "author"       : {
 
@@ -22,7 +30,12 @@
 
     ],
 
-    "repository" : "git://github.com/devcrust/node-dips.git",
+    "repository" : {
+
+        "type" : "git",
+        "url"  : "git://github.com/devcrust/node-dips.git"
+
+    },
 
     "bugs" : {
 

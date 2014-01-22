@@ -799,6 +799,41 @@ suite('Dips', function ()
 
             })(), 'Result does not match');
 
+            /*
+             * ----------------
+             * --- Case III ---
+             * ----------------
+             */
+
+            // Set instance
+            dips = Dips({
+
+                dependencies : {
+
+                    npm : {
+
+                        ignore : ['mocha']
+
+                    }
+
+                }
+
+            });
+
+            // Check equal
+            assert.deepEqual(dips.getDependencies(), (function ()
+            {
+
+                var keys = Object.keys(require('../lib/dependency/npm.js').getDependencies(undefined, ['mocha']));
+
+                // Add dips
+                keys.unshift('dips');
+
+                return keys;
+
+
+            })(), 'Result does not match');
+
         });
 
         test('Core and NPM dependencies', function ()

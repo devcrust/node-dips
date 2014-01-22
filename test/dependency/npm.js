@@ -7,28 +7,16 @@ var assert = require('assert'),
 suite('NPM Dependencies', function ()
 {
 
-    var modules = npm.modules,
-        dependencies = npm.getDependencies();
-
-    test('Accessibility', function ()
-    {
-
-        // Check is array
-        assert.equal(Array.isArray(modules), true, 'Modules is not an array');
-
-        // Check is object
-        assert.equal(dependencies instanceof Object, true, 'Dependencies not an object');
-
-        // Check matches content
-        assert.deepEqual(Object.keys(dependencies), modules, 'Dependencies do not match');
-
-    });
+    var dependencies;
 
     test('Availability', function ()
     {
 
+        // Get dependencies
+        dependencies = npm.getDependencies();
+
         // List modules
-        modules.forEach(function (id)
+        Object.keys(dependencies).forEach(function (id)
         {
 
             var result;
@@ -77,6 +65,23 @@ suite('NPM Dependencies', function ()
                 util.format('Result for NPM module "%s" does not match', key));
 
         });
+
+    });
+
+    test('Ignore', function ()
+    {
+
+        // Get dependencies
+        dependencies = npm.getDependencies(undefined, ['mocha']);
+
+        // Check equal
+        assert.deepEqual(dependencies, [], 'Result does not match');
+
+        // Get dependencies
+        dependencies = npm.getDependencies(undefined, [/mocha/]);
+
+        // Check equal
+        assert.deepEqual(dependencies, [], 'Result does not match');
 
     });
 
