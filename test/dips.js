@@ -751,13 +751,16 @@ suite('Dips', function ()
             });
 
             // Check equal
-            assert.deepEqual(dips.getDependencies(), (function ()
+            assert.deepEqual(dips.getDependencies().sort(), (function ()
             {
 
                 var keys = Object.keys(require('../lib/dependency/npm.js').getDependencies());
 
                 // Add dips
-                keys.unshift('dips');
+                keys.push('dips');
+
+                // Sort keys
+                keys.sort();
 
                 return keys;
 
