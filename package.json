@@ -7,7 +7,7 @@
         "di", "dependency injection", "ioc", "inversion of control", "dependency", "injection", "inject", "entity",
         "management"
     ],
-    "version"     : "0.1.5",
+    "version"     : "0.1.6",
     "license"     : {
 
         "type" : "MIT",
