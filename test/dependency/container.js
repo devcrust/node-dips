@@ -51,10 +51,10 @@ suite('Dependency Container', function ()
         {
 
             // Check equal
-            assert.deepEqual(container.getDependencies(), Object.keys(dependencies), 'Result does not match');
+            assert.deepEqual(container.getDependencies().sort(), Object.keys(dependencies).sort(), 'Result does not match');
 
             // Check equal
-            assert.deepEqual(Object.keys(dependencies), container.getDependencies(), 'Result does not match');
+            assert.deepEqual(Object.keys(dependencies).sort(), container.getDependencies().sort(), 'Result does not match');
 
         });
 
@@ -74,10 +74,10 @@ suite('Dependency Container', function ()
             assert.equal(container.hasDependency('http'), true, 'Dependency does not exist');
 
             // Check equal
-            assert.deepEqual(container.getDependencies(), Object.keys(dependencies2), 'Result does not match');
+            assert.deepEqual(container.getDependencies().sort(), Object.keys(dependencies2).sort(), 'Result does not match');
 
             // Check equal
-            assert.deepEqual(Object.keys(dependencies2), container.getDependencies(), 'Result does not match');
+            assert.deepEqual(Object.keys(dependencies2).sort(), container.getDependencies().sort(), 'Result does not match');
 
             /*
              * +++++++++++++++
@@ -89,10 +89,10 @@ suite('Dependency Container', function ()
             assert.deepEqual(container.setDependencies(dependencies), container, 'Result does not match');
 
             // Check equal
-            assert.deepEqual(container.getDependencies(), Object.keys(dependencies), 'Result does not match');
+            assert.deepEqual(container.getDependencies().sort(), Object.keys(dependencies).sort(), 'Result does not match');
 
             // Check equal
-            assert.deepEqual(Object.keys(dependencies), container.getDependencies(), 'Result does not match');
+            assert.deepEqual(Object.keys(dependencies).sort(), container.getDependencies().sort(), 'Result does not match');
 
         });
 
@@ -115,10 +115,10 @@ suite('Dependency Container', function ()
             assert.equal(container.hasDependency('http'), true, 'Dependency does not exist');
 
             // Check equal
-            assert.deepEqual(container.getDependencies(), Object.keys(dependencies2), 'Result does not match');
+            assert.deepEqual(container.getDependencies().sort(), Object.keys(dependencies2).sort(), 'Result does not match');
 
             // Check equal
-            assert.deepEqual(Object.keys(dependencies2), container.getDependencies(), 'Result does not match');
+            assert.deepEqual(Object.keys(dependencies2).sort(), container.getDependencies().sort(), 'Result does not match');
 
             /*
              * +++++++++++++++
@@ -133,10 +133,10 @@ suite('Dependency Container', function ()
             assert.deepEqual(container.addDependencies(dependencies), container, 'Result does not match');
 
             // Check equal
-            assert.deepEqual(container.getDependencies(), Object.keys(dependencies), 'Result does not match');
+            assert.deepEqual(container.getDependencies().sort(), Object.keys(dependencies).sort(), 'Result does not match');
 
             // Check equal
-            assert.deepEqual(Object.keys(dependencies), container.getDependencies(), 'Result does not match');
+            assert.deepEqual(Object.keys(dependencies).sort(), container.getDependencies().sort(), 'Result does not match');
 
         });
 

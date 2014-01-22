@@ -465,13 +465,16 @@ suite('Dips', function ()
              */
 
             // Check equal
-            assert.deepEqual(dips.getDependencies(), (function ()
+            assert.deepEqual(dips.getDependencies().sort(), (function ()
             {
 
                 var keys = Object.keys(dependencies);
 
                 // Add dips
                 keys.push('dips');
+
+                // Sort keys
+                keys.sort()
 
                 return keys;
 
@@ -485,13 +488,16 @@ suite('Dips', function ()
              */
 
             // Check equal
-            assert.deepEqual(dips2.getDependencies(), (function ()
+            assert.deepEqual(dips2.getDependencies().sort(), (function ()
             {
 
                 var keys = Object.keys(dependencies);
 
                 // Add dips
                 keys.unshift('dips');
+
+                // Sort keys
+                keys.sort()
 
                 return keys;
 
@@ -516,13 +522,13 @@ suite('Dips', function ()
             assert.equal(dips.hasDependency('http'), true, 'Dependency does not exist');
 
             // Check equal
-            assert.deepEqual(dips.getDependencies(), Object.keys(dependencies2), 'Result does not match');
+            assert.deepEqual(dips.getDependencies().sort(), Object.keys(dependencies2).sort(), 'Result does not match');
 
             // Set dependencies
             assert.deepEqual(dips.setDependencies(dependencies), dips, 'Result does not match');
 
             // Check equal
-            assert.deepEqual(dips.getDependencies(), Object.keys(dependencies), 'Result does not match');
+            assert.deepEqual(dips.getDependencies().sort(), Object.keys(dependencies).sort(), 'Result does not match');
 
             /*
              * ---------------
@@ -537,13 +543,13 @@ suite('Dips', function ()
             assert.equal(dips2.hasDependency('http'), true, 'Dependency does not exist');
 
             // Check equal
-            assert.deepEqual(dips2.getDependencies(), Object.keys(dependencies2), 'Result does not match');
+            assert.deepEqual(dips2.getDependencies().sort(), Object.keys(dependencies2).sort(), 'Result does not match');
 
             // Set dependencies
             assert.deepEqual(dips2.setDependencies(dependencies), dips2, 'Result does not match');
 
             // Check equal
-            assert.deepEqual(dips2.getDependencies(), Object.keys(dependencies), 'Result does not match');
+            assert.deepEqual(dips2.getDependencies().sort(), Object.keys(dependencies).sort(), 'Result does not match');
 
         });
 
@@ -789,13 +795,16 @@ suite('Dips', function ()
             });
 
             // Check equal
-            assert.deepEqual(dips.getDependencies(), (function ()
+            assert.deepEqual(dips.getDependencies().sort(), (function ()
             {
 
                 var keys = Object.keys(require('../lib/dependency/npm.js').getDependencies('npm'));
 
                 // Add dips
                 keys.unshift('dips');
+
+                // Sort keys
+                keys.sort()
 
                 return keys;
 
@@ -824,13 +833,16 @@ suite('Dips', function ()
             });
 
             // Check equal
-            assert.deepEqual(dips.getDependencies(), (function ()
+            assert.deepEqual(dips.getDependencies().sort(), (function ()
             {
 
                 var keys = Object.keys(require('../lib/dependency/npm.js').getDependencies(undefined, ['mocha']));
 
                 // Add dips
                 keys.unshift('dips');
+
+                // Sort keys
+                keys.sort()
 
                 return keys;
 
@@ -877,7 +889,7 @@ suite('Dips', function ()
             });
 
             // Check equal
-            assert.deepEqual(dips.getDependencies(), (function ()
+            assert.deepEqual(dips.getDependencies().sort(), (function ()
             {
 
                 var keys = Object.keys(extend(require('../lib/dependency/npm.js').getDependencies(),
@@ -885,6 +897,9 @@ suite('Dips', function ()
 
                 // Add dips
                 keys.unshift('dips');
+
+                // Sort keys
+                keys.sort();
 
                 return keys;
 
@@ -919,7 +934,7 @@ suite('Dips', function ()
             });
 
             // Check equal
-            assert.deepEqual(dips.getDependencies(), (function ()
+            assert.deepEqual(dips.getDependencies().sort(), (function ()
             {
 
                 var keys = Object.keys(extend(require('../lib/dependency/npm.js').getDependencies('npm'),
@@ -927,6 +942,9 @@ suite('Dips', function ()
 
                 // Add dips
                 keys.unshift('dips');
+
+                // Sort keys
+                keys.sort();
 
                 return keys;
 
