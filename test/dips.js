@@ -686,13 +686,16 @@ suite('Dips', function ()
             });
 
             // Check equal
-            assert.deepEqual(dips.getDependencies(), (function ()
+            assert.deepEqual(dips.getDependencies().sort(), (function ()
             {
 
                 var keys = Object.keys(require('../lib/dependency/core.js').getDependencies());
 
                 // Add dips
                 keys.unshift('dips');
+
+                // Sort keys
+                keys.sort();
 
                 return keys;
 
@@ -721,13 +724,16 @@ suite('Dips', function ()
             });
 
             // Check equal
-            assert.deepEqual(dips.getDependencies(), (function ()
+            assert.deepEqual(dips.getDependencies().sort(), (function ()
             {
 
                 var keys = Object.keys(require('../lib/dependency/core.js').getDependencies('core'));
 
                 // Add dips
                 keys.unshift('dips');
+
+                // Sort keys
+                keys.sort();
 
                 return keys;
 
