@@ -1,4 +1,10 @@
-# Dips [![NPM version](https://badge.fury.io/js/dips.png)](http://badge.fury.io/js/dips) [![Build Status](https://travis-ci.org/devcrust/node-dips.png?branch=master)](https://travis-ci.org/devcrust/node-dips)
+# Dips
+
+[![NPM version](https://badge.fury.io/js/dips.png)](http://badge.fury.io/js/dips)
+[![Build Status](https://travis-ci.org/devcrust/node-dips.png?branch=master)](https://travis-ci.org/devcrust/node-dips)
+[![Dependency Status](https://gemnasium.com/devcrust/node-dips.png)](https://gemnasium.com/devcrust/node-dips)
+[![Coverage Status](https://coveralls.io/repos/devcrust/node-dips/badge.png?branch=master)](https://coveralls.io/r/devcrust/node-dips?branch=master)
+[![Stories in Ready](https://badge.waffle.io/devcrust/node-dips.png?label=ready)](https://waffle.io/devcrust/node-dips)
 
 A simple yet powerful dependency injection and entity (file) management framework for Node.js
 
