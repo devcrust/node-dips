@@ -54,7 +54,10 @@
     },
     "devDependencies" : {
 
-        "mocha" : "1.17.x"
+        "mocha"               : "1.17.x",
+        "mocha-lcov-reporter" : "0.0.x",
+        "coveralls"           : "2.7.x",
+        "blanket"             : "1.1.x"
 
     },
 
@@ -68,10 +71,22 @@
 
     "main" : "./dips.js",
 
+    "config" : {
+
+        "blanket" : {
+
+            "pattern" : "src"
+
+        }
+
+    },
+
     "scripts" : {
 
-        "test"      : "NODE_ENV=test ./node_modules/.bin/mocha --reporter spec --ui tdd --timeout 5000 --slow 100 --colors --bail --recursive test/",
-        "build-doc" : "jsdoc --destination docs --recurse --private lib/ dips.js"
+        "test"          : "./node_modules/.bin/mocha --reporter spec --ui tdd --timeout 5000 --slow 100 --colors --bail --recursive test/",
+        "test-coverage" : "./node_modules/.bin/mocha --require blanket --reporter mocha-lcov-reporter --ui tdd | ./node_modules/coveralls/bin/coveralls.js",
+        "coverage"      : "./node_modules/.bin/mocha --require blanket --reporter html-cov --ui tdd > docs/report/coverage.html",
+        "build-doc"     : "jsdoc --destination docs --recurse --private lib/ dips.js"
 
     }
 
