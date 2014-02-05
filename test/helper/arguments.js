@@ -1,8 +1,8 @@
 /*global suite: false, test: false*/
 
 var assert = require('assert'),
-    Container = require('../../lib/dependency/container.js'),
-    args = require('../../lib/helper/arguments.js');
+    Container = require('../../src/lib/dependency/container.js'),
+    args = require('../../src/lib/helper/arguments.js');
 
 suite('Helpers :: Arguments', function ()
 {

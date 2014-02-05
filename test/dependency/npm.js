@@ -2,7 +2,7 @@
 
 var assert = require('assert'),
     util = require('util'),
-    npm = require('../../lib/dependency/npm.js');
+    npm = require('../../src/lib/dependency/npm.js');
 
 suite('NPM Dependencies', function ()
 {
@@ -75,13 +75,13 @@ suite('NPM Dependencies', function ()
         dependencies = npm.getDependencies(undefined, ['mocha']);
 
         // Check equal
-        assert.deepEqual(dependencies, [], 'Result does not match');
+        assert.deepEqual(Object.keys(dependencies), ['blanket', 'coveralls', 'mocha-lcov-reporter'], 'Result does not match');
 
         // Get dependencies
         dependencies = npm.getDependencies(undefined, [/mocha/]);
 
         // Check equal
-        assert.deepEqual(dependencies, [], 'Result does not match');
+        assert.deepEqual(Object.keys(dependencies), ['blanket', 'coveralls'], 'Result does not match');
 
     });
 

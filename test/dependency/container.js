@@ -1,7 +1,7 @@
 /*global suite: false, setup: false, test: false*/
 
 var assert = require('assert'),
-    Container = require('../../lib/dependency/container.js');
+    Container = require('../../src/lib/dependency/container.js');
 
 suite('Dependency Container', function ()
 {

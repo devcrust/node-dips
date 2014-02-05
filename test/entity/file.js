@@ -2,7 +2,7 @@
 
 var assert = require('assert'),
     path = require('path'),
-    file = require('../../lib/entity/file.js');
+    file = require('../../src/lib/entity/file.js');
 
 suite('File Entities', function ()
 {
