@@ -2,7 +2,7 @@
 
 var assert = require('assert'),
     util = require('util'),
-    core = require('../../lib/dependency/core.js');
+    core = require('../../src/lib/dependency/core.js');
 
 suite('Core Dependencies', function ()
 {

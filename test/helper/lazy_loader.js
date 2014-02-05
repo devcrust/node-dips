@@ -1,12 +1,13 @@
 /*global suite: false, test: false*/
 
 var assert = require('assert'),
-    loader = require('../../lib/helper/lazy_loader.js');
+    path = require('path'),
+    loader = require('../../src/lib/helper/lazy_loader.js');
 
 suite('Helpers :: Lazy Loader', function ()
 {
 
-    var modules = ['fs', 'http', 'util', '../../lib/dependency/core.js'],
+    var modules = ['fs', 'http', 'util', path.resolve(__dirname, '../../src/lib/dependency/core.js')],
         modulesExports = modules.map(function (value)
         {
 
@@ -43,7 +44,7 @@ suite('Helpers :: Lazy Loader', function ()
             'fs'   : 'fs',
             'http' : 'http',
             'util' : 'util',
-            'core' : '../../lib/dependency/core.js'
+            'core' : path.resolve(__dirname, '../../src/lib/dependency/core.js')
 
         });
 

@@ -2,8 +2,8 @@
 
 var assert = require('assert'),
     path = require('path'),
-    Dips = require('../dips.js'),
-    Container = require('../lib/dependency/container.js');
+    Dips = require('../src/dips.js'),
+    Container = require('../src/lib/dependency/container.js');
 
 suite('Dips', function ()
 {
@@ -80,7 +80,7 @@ suite('Dips', function ()
 
             // Check equal
             assert.deepEqual(Object.keys(dips.$),
-                Object.keys(require('../lib/entity/file.js').getEntities(['helpers', 'lib'],
+                Object.keys(require('../src/lib/entity/file.js').getEntities(['helpers', 'lib'],
                     path.resolve(__dirname, '_fixtures'))), 'Result does not match');
 
             // Check equal
@@ -152,7 +152,7 @@ suite('Dips', function ()
             });
 
             // Check equal
-            assert.deepEqual(Object.keys(dips.$), Object.keys(require('../lib/entity/file.js').getEntities({
+            assert.deepEqual(Object.keys(dips.$), Object.keys(require('../src/lib/entity/file.js').getEntities({
 
                 libraries    : 'lib',
                 json_helpers : 'helpers/view/json'
@@ -190,7 +190,7 @@ suite('Dips', function ()
             });
 
             // Check equal
-            assert.deepEqual(Object.keys(dips.$), Object.keys(require('../lib/entity/file.js').getEntities({
+            assert.deepEqual(Object.keys(dips.$), Object.keys(require('../src/lib/entity/file.js').getEntities({
 
                 libraries    : 'lib',
                 json_helpers : 'helpers/view/json'
@@ -689,7 +689,7 @@ suite('Dips', function ()
             assert.deepEqual(dips.getDependencies().sort(), (function ()
             {
 
-                var keys = Object.keys(require('../lib/dependency/core.js').getDependencies());
+                var keys = Object.keys(require('../src/lib/dependency/core.js').getDependencies());
 
                 // Add dips
                 keys.unshift('dips');
@@ -727,7 +727,7 @@ suite('Dips', function ()
             assert.deepEqual(dips.getDependencies().sort(), (function ()
             {
 
-                var keys = Object.keys(require('../lib/dependency/core.js').getDependencies('core'));
+                var keys = Object.keys(require('../src/lib/dependency/core.js').getDependencies('core'));
 
                 // Add dips
                 keys.unshift('dips');
@@ -766,7 +766,7 @@ suite('Dips', function ()
             assert.deepEqual(dips.getDependencies().sort(), (function ()
             {
 
-                var keys = Object.keys(require('../lib/dependency/npm.js').getDependencies());
+                var keys = Object.keys(require('../src/lib/dependency/npm.js').getDependencies());
 
                 // Add dips
                 keys.push('dips');
@@ -804,7 +804,7 @@ suite('Dips', function ()
             assert.deepEqual(dips.getDependencies().sort(), (function ()
             {
 
-                var keys = Object.keys(require('../lib/dependency/npm.js').getDependencies('npm'));
+                var keys = Object.keys(require('../src/lib/dependency/npm.js').getDependencies('npm'));
 
                 // Add dips
                 keys.unshift('dips');
@@ -842,7 +842,7 @@ suite('Dips', function ()
             assert.deepEqual(dips.getDependencies().sort(), (function ()
             {
 
-                var keys = Object.keys(require('../lib/dependency/npm.js').getDependencies(undefined, ['mocha']));
+                var keys = Object.keys(require('../src/lib/dependency/npm.js').getDependencies(undefined, ['mocha']));
 
                 // Add dips
                 keys.unshift('dips');
@@ -898,8 +898,8 @@ suite('Dips', function ()
             assert.deepEqual(dips.getDependencies().sort(), (function ()
             {
 
-                var keys = Object.keys(extend(require('../lib/dependency/npm.js').getDependencies(),
-                    require('../lib/dependency/core.js').getDependencies()));
+                var keys = Object.keys(extend(require('../src/lib/dependency/npm.js').getDependencies(),
+                    require('../src/lib/dependency/core.js').getDependencies()));
 
                 // Add dips
                 keys.unshift('dips');
@@ -943,8 +943,8 @@ suite('Dips', function ()
             assert.deepEqual(dips.getDependencies().sort(), (function ()
             {
 
-                var keys = Object.keys(extend(require('../lib/dependency/npm.js').getDependencies('npm'),
-                    require('../lib/dependency/core.js').getDependencies('core')));
+                var keys = Object.keys(extend(require('../src/lib/dependency/npm.js').getDependencies('npm'),
+                    require('../src/lib/dependency/core.js').getDependencies('core')));
 
                 // Add dips
                 keys.unshift('dips');
