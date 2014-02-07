@@ -70,7 +70,7 @@
 
     ],
 
-    "main" : "./dips.js",
+    "main" : "src/dips.js",
 
     "config" : {
 
