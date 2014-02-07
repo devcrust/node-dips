@@ -1,7 +1,7 @@
 /*global suite: false, test: false*/
 
-var assert = require('assert'),
-    path = require('path'),
+var path = require('path'),
+    assert = require('chai').assert,
     file = require('../../src/lib/entity/file.js');
 
 suite('File Entities', function ()

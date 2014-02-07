@@ -1,6 +1,6 @@
 /*global suite: false, setup: false, test: false*/
 
-var assert = require('assert'),
+var assert = require('chai').assert,
     Container = require('../../src/lib/dependency/container.js');
 
 suite('Dependency Container', function ()

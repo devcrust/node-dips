@@ -1,7 +1,7 @@
 /*global suite: false, test: false*/
 
-var assert = require('assert'),
-    util = require('util'),
+var util = require('util'),
+    assert = require('chai').assert,
     core = require('../../src/lib/dependency/core.js');
 
 suite('Core Dependencies', function ()
@@ -14,13 +14,13 @@ suite('Core Dependencies', function ()
     {
 
         // Check is array
-        assert.equal(Array.isArray(modules), true, 'Modules is not an array');
+        assert.isArray(modules, 'Modules is not an array');
 
         // Check is object
-        assert.equal(dependencies instanceof Object, true, 'Dependencies not an object');
+        assert.isObject(dependencies, 'Dependencies not an object');
 
         // Check matches content
-        assert.deepEqual(Object.keys(dependencies), modules, 'Dependencies do not match');
+        assert.deepEqual(Object.keys(dependencies).sort(), modules.sort(), 'Dependencies do not match');
 
     });
 
@@ -37,7 +37,7 @@ suite('Core Dependencies', function ()
             if (id === 'repl') {
 
                 // Check object keys only
-                assert.deepEqual(Object.keys(dependencies[id]), Object.keys(require(id)),
+                assert.deepEqual(Object.keys(dependencies[id]).sort(), Object.keys(require(id)).sort(),
                     util.format('Result for core module "%s" does not match', id));
 
                 return;

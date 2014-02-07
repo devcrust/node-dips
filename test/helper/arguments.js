@@ -1,6 +1,6 @@
 /*global suite: false, test: false*/
 
-var assert = require('assert'),
+var assert = require('chai').assert,
     Container = require('../../src/lib/dependency/container.js'),
     args = require('../../src/lib/helper/arguments.js');
 

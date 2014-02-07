@@ -1,7 +1,7 @@
 /*global suite: false, test: false*/
 
-var assert = require('assert'),
-    path = require('path'),
+var path = require('path'),
+    assert = require('chai').assert,
     loader = require('../../src/lib/helper/lazy_loader.js');
 
 suite('Helpers :: Lazy Loader', function ()
@@ -23,7 +23,7 @@ suite('Helpers :: Lazy Loader', function ()
         result = loader(modules);
 
         // Check result keys
-        assert.deepEqual(Object.keys(result), modules, 'Result keys do not match');
+        assert.deepEqual(Object.keys(result).sort(), modules.sort(), 'Result keys do not match');
 
         // Check result values
         assert.deepEqual(Object.keys(result).map(function (key)
@@ -31,7 +31,7 @@ suite('Helpers :: Lazy Loader', function ()
 
             return result[key];
 
-        }), modulesExports, 'Result values do not match');
+        }).sort(), modulesExports.sort(), 'Result values do not match');
 
     });
 
@@ -49,7 +49,7 @@ suite('Helpers :: Lazy Loader', function ()
         });
 
         // Check result keys
-        assert.deepEqual(Object.keys(result), ['fs', 'http', 'util', 'core'], 'Result keys do not match');
+        assert.deepEqual(Object.keys(result).sort(), ['fs', 'http', 'util', 'core'].sort(), 'Result keys do not match');
 
         // Check result values
         assert.deepEqual(Object.keys(result).map(function (key)
@@ -57,7 +57,7 @@ suite('Helpers :: Lazy Loader', function ()
 
             return result[key];
 
-        }), modulesExports, 'Result values do not match');
+        }).sort(), modulesExports.sort(), 'Result values do not match');
 
     });
 
@@ -68,7 +68,7 @@ suite('Helpers :: Lazy Loader', function ()
         result = loader(['fs', 'not_exist']);
 
         // Check result keys
-        assert.deepEqual(Object.keys(result), ['fs', 'not_exist'], 'Result keys do not match');
+        assert.deepEqual(Object.keys(result).sort(), ['fs', 'not_exist'].sort(), 'Result keys do not match');
 
     });
 

@@ -1,7 +1,7 @@
 /*global suite: false, test: false, setup: false*/
 
-var assert = require('assert'),
-    path = require('path'),
+var path = require('path'),
+    assert = require('chai').assert,
     Dips = require('../src/dips.js'),
     Container = require('../src/lib/dependency/container.js');
 
@@ -79,9 +79,9 @@ suite('Dips', function ()
             });
 
             // Check equal
-            assert.deepEqual(Object.keys(dips.$),
+            assert.deepEqual(Object.keys(dips.$).sort(),
                 Object.keys(require('../src/lib/entity/file.js').getEntities(['helpers', 'lib'],
-                    path.resolve(__dirname, '_fixtures'))), 'Result does not match');
+                    path.resolve(__dirname, '_fixtures'))).sort(), 'Result does not match');
 
             // Check equal
             assert.equal(dips.resolve('not_exists'), undefined, 'Result does not match');
@@ -152,12 +152,12 @@ suite('Dips', function ()
             });
 
             // Check equal
-            assert.deepEqual(Object.keys(dips.$), Object.keys(require('../src/lib/entity/file.js').getEntities({
+            assert.deepEqual(Object.keys(dips.$).sort(), Object.keys(require('../src/lib/entity/file.js').getEntities({
 
                 libraries    : 'lib',
                 json_helpers : 'helpers/view/json'
 
-            }, path.resolve(__dirname, '_fixtures'))), 'Result does not match');
+            }, path.resolve(__dirname, '_fixtures'))).sort(), 'Result does not match');
 
             /*
              * ---------------
@@ -190,12 +190,12 @@ suite('Dips', function ()
             });
 
             // Check equal
-            assert.deepEqual(Object.keys(dips.$), Object.keys(require('../src/lib/entity/file.js').getEntities({
+            assert.deepEqual(Object.keys(dips.$).sort(), Object.keys(require('../src/lib/entity/file.js').getEntities({
 
                 libraries    : 'lib',
                 json_helpers : 'helpers/view/json'
 
-            }, path.resolve(__dirname, '_fixtures'), 'my')), 'Result does not match');
+            }, path.resolve(__dirname, '_fixtures'), 'my')).sort(), 'Result does not match');
 
         });
 
@@ -260,7 +260,7 @@ suite('Dips', function ()
              */
 
             // Check equal
-            assert.deepEqual(dips2.getContainers(), Object.keys(containers), 'Result does not match');
+            assert.deepEqual(dips2.getContainers().sort(), Object.keys(containers).sort(), 'Result does not match');
 
         });
 
@@ -277,7 +277,7 @@ suite('Dips', function ()
             assert.deepEqual(dips.setContainers(containers), dips, 'Result does not match');
 
             // Check equal
-            assert.deepEqual(dips.getContainers(), Object.keys(containers), 'Result does not match');
+            assert.deepEqual(dips.getContainers().sort(), Object.keys(containers).sort(), 'Result does not match');
 
             // Check equal
             assert.deepEqual(dips.setContainers({}), dips, 'Result does not match');
@@ -301,7 +301,7 @@ suite('Dips', function ()
             assert.deepEqual(dips2.setContainers(containers), dips2, 'Result does not match');
 
             // Check equal
-            assert.deepEqual(dips2.getContainers(), Object.keys(containers), 'Result does not match');
+            assert.deepEqual(dips2.getContainers().sort(), Object.keys(containers).sort(), 'Result does not match');
 
         });
 
@@ -350,7 +350,8 @@ suite('Dips', function ()
              */
 
             // Check equal
-            assert.deepEqual(dips2.getContainer(Object.keys(containers)[0]), containers[Object.keys(containers)[0]],
+            assert.deepEqual(dips2.getContainer(Object.keys(containers).sort()[0]),
+                containers[Object.keys(containers).sort()[0]],
                 'Result does not match')
 
             // Check equal
@@ -473,13 +474,10 @@ suite('Dips', function ()
                 // Add dips
                 keys.push('dips');
 
-                // Sort keys
-                keys.sort()
-
                 return keys;
 
 
-            })(), 'Result does not match');
+            })().sort(), 'Result does not match');
 
             /*
              * ---------------
@@ -494,15 +492,12 @@ suite('Dips', function ()
                 var keys = Object.keys(dependencies);
 
                 // Add dips
-                keys.unshift('dips');
-
-                // Sort keys
-                keys.sort()
+                keys.push('dips');
 
                 return keys;
 
 
-            })(), 'Result does not match');
+            })().sort(), 'Result does not match');
 
         });
 
@@ -543,7 +538,8 @@ suite('Dips', function ()
             assert.equal(dips2.hasDependency('http'), true, 'Dependency does not exist');
 
             // Check equal
-            assert.deepEqual(dips2.getDependencies().sort(), Object.keys(dependencies2).sort(), 'Result does not match');
+            assert.deepEqual(dips2.getDependencies().sort(), Object.keys(dependencies2).sort(),
+                'Result does not match');
 
             // Set dependencies
             assert.deepEqual(dips2.setDependencies(dependencies), dips2, 'Result does not match');
@@ -692,15 +688,12 @@ suite('Dips', function ()
                 var keys = Object.keys(require('../src/lib/dependency/core.js').getDependencies());
 
                 // Add dips
-                keys.unshift('dips');
-
-                // Sort keys
-                keys.sort();
+                keys.push('dips');
 
                 return keys;
 
 
-            })(), 'Result does not match');
+            })().sort(), 'Result does not match');
 
             /*
              * ---------------
@@ -730,15 +723,12 @@ suite('Dips', function ()
                 var keys = Object.keys(require('../src/lib/dependency/core.js').getDependencies('core'));
 
                 // Add dips
-                keys.unshift('dips');
-
-                // Sort keys
-                keys.sort();
+                keys.push('dips');
 
                 return keys;
 
 
-            })(), 'Result does not match');
+            })().sort(), 'Result does not match');
 
         });
 
@@ -771,13 +761,10 @@ suite('Dips', function ()
                 // Add dips
                 keys.push('dips');
 
-                // Sort keys
-                keys.sort();
-
                 return keys;
 
 
-            })(), 'Result does not match');
+            })().sort(), 'Result does not match');
 
             /*
              * ---------------
@@ -807,15 +794,12 @@ suite('Dips', function ()
                 var keys = Object.keys(require('../src/lib/dependency/npm.js').getDependencies('npm'));
 
                 // Add dips
-                keys.unshift('dips');
-
-                // Sort keys
-                keys.sort()
+                keys.push('dips');
 
                 return keys;
 
 
-            })(), 'Result does not match');
+            })().sort(), 'Result does not match');
 
             /*
              * ----------------
@@ -845,15 +829,12 @@ suite('Dips', function ()
                 var keys = Object.keys(require('../src/lib/dependency/npm.js').getDependencies(undefined, ['mocha']));
 
                 // Add dips
-                keys.unshift('dips');
-
-                // Sort keys
-                keys.sort()
+                keys.push('dips');
 
                 return keys;
 
 
-            })(), 'Result does not match');
+            })().sort(), 'Result does not match');
 
         });
 
@@ -902,15 +883,12 @@ suite('Dips', function ()
                     require('../src/lib/dependency/core.js').getDependencies()));
 
                 // Add dips
-                keys.unshift('dips');
-
-                // Sort keys
-                keys.sort();
+                keys.push('dips');
 
                 return keys;
 
 
-            })(), 'Result does not match');
+            })().sort(), 'Result does not match');
 
             /*
              * ---------------
@@ -947,15 +925,12 @@ suite('Dips', function ()
                     require('../src/lib/dependency/core.js').getDependencies('core')));
 
                 // Add dips
-                keys.unshift('dips');
-
-                // Sort keys
-                keys.sort();
+                keys.push('dips');
 
                 return keys;
 
 
-            })(), 'Result does not match');
+            })().sort(), 'Result does not match');
 
         });
 

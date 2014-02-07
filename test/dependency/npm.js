@@ -1,7 +1,7 @@
 /*global suite: false, test: false*/
 
-var assert = require('assert'),
-    util = require('util'),
+var util = require('util'),
+    assert = require('chai').assert,
     npm = require('../../src/lib/dependency/npm.js');
 
 suite('NPM Dependencies', function ()
@@ -75,13 +75,16 @@ suite('NPM Dependencies', function ()
         dependencies = npm.getDependencies(undefined, ['mocha']);
 
         // Check equal
-        assert.deepEqual(Object.keys(dependencies), ['blanket', 'coveralls', 'mocha-lcov-reporter'], 'Result does not match');
+        assert.deepEqual(Object.keys(dependencies).sort(),
+            ['blanket', 'chai', 'coveralls', 'mocha-lcov-reporter'].sort(),
+            'Result does not match');
 
         // Get dependencies
         dependencies = npm.getDependencies(undefined, [/mocha/]);
 
         // Check equal
-        assert.deepEqual(Object.keys(dependencies), ['blanket', 'coveralls'], 'Result does not match');
+        assert.deepEqual(Object.keys(dependencies).sort(), ['blanket', 'chai', 'coveralls'].sort(),
+            'Result does not match');
 
     });
 
