@@ -55,6 +55,7 @@
     "devDependencies" : {
 
         "mocha"               : "1.17.x",
+        "chai"                : "1.9.x",
         "mocha-lcov-reporter" : "0.0.x",
         "coveralls"           : "2.7.x",
         "blanket"             : "1.1.x"
